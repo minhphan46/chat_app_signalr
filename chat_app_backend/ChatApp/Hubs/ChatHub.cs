@@ -13,6 +13,30 @@ namespace ChatApp.Hubs
             _shareDb = shareDb;
         }
 
+        public async Task SendUserMessage(string UserName, int RandomUserId, string Message)
+        {
+            MessageModel MessageModel = new MessageModel
+            {
+                CreateDate = DateTime.Now,
+                MessageText = Message,
+                UserId = RandomUserId,
+                UserName = UserName
+            };
+            await Clients.All.SendAsync("ReceiveMessage", MessageModel);
+        }
+
+        public async Task JoinUSer(string userName, int userId)
+        {
+            MessageModel MessageModel = new MessageModel
+            {
+                CreateDate = DateTime.Now,
+                MessageText = userName + " joined chat",
+                UserId = 0,
+                UserName = "system"
+            };
+            await Clients.All.SendAsync("ReceiveMessage", MessageModel);
+        }
+
         public async Task JoinChat(UserConnection connection)
         {
             await Clients.All.SendAsync("ReceiveMessage", "admin", $"{connection.Username} has joined.");
