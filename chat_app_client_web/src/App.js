@@ -14,7 +14,7 @@ function App() {
     try {
       // initiate a connection
       const conn = new HubConnectionBuilder()
-        .withUrl("https://localhost:7038/Chat")
+        .withUrl("https://upright-wealthy-walrus.ngrok-free.app/chat")
         .configureLogging(LogLevel.Information)
         .build();
 
