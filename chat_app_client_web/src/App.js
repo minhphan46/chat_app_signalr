@@ -36,10 +36,13 @@ function App() {
           console.log("Message received: ", messageObj);
 
           // Destructure the actual properties from the object
-          const { userName: username, messageText: msg } = messageObj;
+          const { userId, userName: username, messageText: msg } = messageObj;
 
           // Append new message to the state
-          setMessages((prevMessages) => [...prevMessages, { username, msg }]);
+          setMessages((prevMessages) => [
+            ...prevMessages,
+            { userId, username, msg },
+          ]);
         } catch (error) {
           console.error("Error parsing message: ", error, res);
         }
@@ -83,7 +86,11 @@ function App() {
             </Col>
           </Row>
           {connection ? (
-            <ChatRoom messages={messages} sendMessage={sendMessage}></ChatRoom>
+            <ChatRoom
+              userId={userId}
+              messages={messages}
+              sendMessage={sendMessage}
+            ></ChatRoom>
           ) : (
             <WaitingRoom joinChatRoom={joinChatRoom}></WaitingRoom>
           )}

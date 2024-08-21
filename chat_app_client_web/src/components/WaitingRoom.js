@@ -3,13 +3,12 @@ import { Col, Form, FormControl, Row, Button } from "react-bootstrap";
 
 const WaitingRoom = ({ joinChatRoom }) => {
   const [username, setUsername] = useState();
-  const [chatRoom, setChatRoom] = useState();
 
   return (
     <Form
       onSubmit={(e) => {
         e.preventDefault();
-        joinChatRoom(username, chatRoom);
+        joinChatRoom(username);
       }}
     >
       <Row class="px-5 my-5">
@@ -18,10 +17,6 @@ const WaitingRoom = ({ joinChatRoom }) => {
             <FormControl
               placeholder="Username"
               onChange={(e) => setUsername(e.target.value)}
-            />
-            <FormControl
-              placeholder="Chat Room"
-              onChange={(e) => setChatRoom(e.target.value)}
             />
           </Form.Group>
         </Col>

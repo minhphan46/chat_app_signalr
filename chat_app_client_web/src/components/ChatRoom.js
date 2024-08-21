@@ -2,7 +2,7 @@ import { Col, Row } from "react-bootstrap";
 import MessageContainer from "./MessageContainer";
 import SendMessageForm from "./SendMessageForm";
 
-const chatRoom = ({ messages, sendMessage }) => (
+const chatRoom = ({ userId, messages, sendMessage }) => (
   <div>
     <Row className="px-5 py-5">
       <Col sm="12">
@@ -12,7 +12,7 @@ const chatRoom = ({ messages, sendMessage }) => (
     </Row>
     <Row className="px-5 py-5">
       <Col sm="12">
-        <MessageContainer messages={messages} />
+        <MessageContainer userId={userId} messages={messages} />
       </Col>
       <Col sm="12">
         <SendMessageForm sendMessage={sendMessage} />

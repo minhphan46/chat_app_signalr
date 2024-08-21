@@ -1,0 +1,65 @@
+.message-container {
+    padding: 10px;
+  }
+  
+  .message-row {
+    margin-bottom: 10px;
+    display: flex;
+    align-items: flex-start;
+  }
+  
+  .system-message .message-bubble {
+    background-color: rgba(0, 0, 0, 0.6); /* Background đen trong mờ */
+    color: white; /* Màu chữ trắng cho tin nhắn hệ thống */
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center; /* Canh giữa văn bản */
+  }
+  
+  .current-user .message-bubble {
+    background-color: #bebeb0; /* Màu nền cho tin nhắn của người dùng hiện tại */
+    color: black; /* Màu chữ đen cho tin nhắn của người dùng hiện tại */
+    margin-left: auto;
+    text-align: right; /* Canh phải nội dung tin nhắn */
+  }
+  
+  .other-user .message-bubble {
+    background-color: #edf4ff; /* Màu nền cho tin nhắn của người dùng khác */
+    color: black; /* Màu chữ đen cho tin nhắn của người dùng khác */
+  }
+  
+  .message-avatar {
+    display: flex;
+    align-items: center;
+  }
+  
+  .avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #82B1FF;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: bold;
+    margin-right: 10px;
+  }
+  
+  .message-bubble {
+    display: inline-block; /* Để bọt tin nhắn có chiều ngang theo độ dài chữ */
+    max-width: 80%;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .message-content {
+    word-wrap: break-word; /* Đảm bảo nội dung không bị tràn ra ngoài */
+  }
+  
+  .message-content p {
+    margin: 0;
+  }
+  
