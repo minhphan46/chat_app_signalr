@@ -1,4 +1,6 @@
+import 'package:chat_app_mobile/screens/login_screen.dart';
 import 'package:flutter/material.dart';
+import 'utils/app_theme.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,19 +13,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Chat App Mobile',
+      title: 'Chat application',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
+        fontFamily: AppTheme.firstFontName,
+        primarySwatch: Colors.blue,
       ),
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Chat App Mobile'),
-        ),
-        body: const Center(
-          child: Text('Hello World'),
-        ),
-      ),
+      debugShowCheckedModeBanner: false,
+      home: const LoginScreen(),
     );
   }
 }
