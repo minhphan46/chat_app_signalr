@@ -34,7 +34,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
   ScrollController chatListScrollController = ScrollController();
   TextEditingController messageTextController = TextEditingController();
-  
+
   submitMessageFunction() async {
     var messageText = removeMessageExtraChar(messageTextController.text);
     await connection.invoke('SendUserMessage',
