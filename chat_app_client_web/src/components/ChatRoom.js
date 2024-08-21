@@ -2,18 +2,19 @@ import { Col, Row } from "react-bootstrap";
 import MessageContainer from "./MessageContainer";
 import SendMessageForm from "./SendMessageForm";
 
-const chatRoom = ({ userId, messages, sendMessage }) => (
-  <div>
-    <Row className="px-5 py-5">
+const ChatRoom = ({ userId, messages, sendMessage }) => (
+  <div className="chat-room">
+    {/* <Row className="px-5 py-4">
       <Col sm="12">
-        <h1 className="font-weight-light">Chat Room</h1>
+        <h1 className="font-weight-light text-center">Chat Room</h1>
       </Col>
-      <Col sm="12"></Col>
-    </Row>
-    <Row className="px-5 py-5">
-      <Col sm="12">
+    </Row> */}
+    <main className="px-5 py-4">
+      <Col sm="12" className="message-container-wrapper">
         <MessageContainer userId={userId} messages={messages} />
       </Col>
+    </main>
+    <Row className="px-5 py-4">
       <Col sm="12">
         <SendMessageForm sendMessage={sendMessage} />
       </Col>
@@ -21,4 +22,4 @@ const chatRoom = ({ userId, messages, sendMessage }) => (
   </div>
 );
 
-export default chatRoom;
+export default ChatRoom;

@@ -11,19 +11,24 @@ const SendMessageForm = ({ sendMessage }) => {
   };
 
   return (
-    <Form onSubmit={handleSubmit}>
+    <Form onSubmit={handleSubmit} className="send-message-form">
       <InputGroup className="mb-3">
-        <InputGroup.Text>Chat</InputGroup.Text>
         <Form.Control
           type="text"
           placeholder="Type your message here"
           value={message}
           onChange={(e) => setMessage(e.target.value)}
+          className="message-input"
         />
+        <Button
+          variant="primary"
+          type="submit"
+          disabled={!message}
+          className="send-button"
+        >
+          Send
+        </Button>
       </InputGroup>
-      <Button variant="primary" type="submit" disabled={!message}>
-        Send
-      </Button>
     </Form>
   );
 };

@@ -5,7 +5,7 @@
   .message-row {
     margin-bottom: 10px;
     display: flex;
-    align-items: flex-start;
+    align-items: center;
   }
   
   .system-message .message-bubble {
@@ -21,6 +21,7 @@
     color: black; /* Màu chữ đen cho tin nhắn của người dùng hiện tại */
     margin-left: auto;
     text-align: right; /* Canh phải nội dung tin nhắn */
+    flex-direction: row-reverse;
   }
   
   .other-user .message-bubble {
@@ -49,12 +50,15 @@
   
   .message-bubble {
     display: inline-block; /* Để bọt tin nhắn có chiều ngang theo độ dài chữ */
-    max-width: 80%;
+    max-width: 80%; /* Giới hạn chiều rộng tối đa là 80% */
     padding: 10px;
     border-radius: 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
-  
+    word-wrap: break-word; /* Đảm bảo nội dung không bị tràn ra ngoài */
+    white-space: normal; /* Cho phép nội dung xuống hàng khi cần */
+}
+
+
   .message-content {
     word-wrap: break-word; /* Đảm bảo nội dung không bị tràn ra ngoài */
   }
@@ -62,4 +66,5 @@
   .message-content p {
     margin: 0;
   }
+  
   
