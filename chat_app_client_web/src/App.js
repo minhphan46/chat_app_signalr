@@ -75,11 +75,22 @@ function App() {
     }
   };
 
+  const leaveChatRoom = async () => {
+    try {
+      if (connection) {
+        await connection.stop();
+        setConnection(null);
+      }
+    } catch (error) {
+      console.error("Leave chat room error: ", error);
+    }
+  };
+
   return (
     <div className="App">
       <header>
         <h1>Chat App💬</h1>
-        <SignOut />
+        {connection && <SignOut logout={leaveChatRoom} />}
       </header>
 
       <section>
@@ -99,9 +110,9 @@ function App() {
 
 export default App;
 
-function SignOut() {
+function SignOut({ logout }) {
   return (
-    <button className="sign-out" onClick={() => {}}>
+    <button className="sign-out" onClick={() => logout()}>
       Sign Out
     </button>
   );
