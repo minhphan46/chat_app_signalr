@@ -14,7 +14,7 @@ builder.Services.AddCors(opt =>
 {
     opt.AddPolicy("reactApp", builder =>
     {
-        builder.WithOrigins("http://localhost:3000", "https://9sc9bvvj-3000.asse.devtunnels.ms")
+        builder.WithOrigins("http://localhost:3000", "https://chat-app-signalr.onrender.com")
             .AllowAnyHeader()
             .AllowAnyMethod()
             .AllowCredentials();

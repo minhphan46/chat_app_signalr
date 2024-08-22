@@ -79,7 +79,7 @@ class _ChatScreenState extends State<ChatScreen> {
   //set url and configs
   final connection = HubConnectionBuilder()
       .withUrl(
-          'https://upright-wealthy-walrus.ngrok-free.app/chat',
+          'https://quick-streets-stand.loca.lt/chat',
           HttpConnectionOptions(
             logging: (level, message) => print(
               "Connect the signalR: $level: $message",

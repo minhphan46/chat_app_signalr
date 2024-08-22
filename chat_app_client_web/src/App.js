@@ -22,7 +22,7 @@ function App() {
       setUsername(username);
       // initiate a connection
       const conn = new HubConnectionBuilder()
-        .withUrl("https://upright-wealthy-walrus.ngrok-free.app/chat")
+        .withUrl("https://quick-streets-stand.loca.lt/chat")
         .configureLogging(LogLevel.Information)
         .build();
 
