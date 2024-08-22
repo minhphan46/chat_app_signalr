@@ -19,7 +19,7 @@ function ChatRoom({ userId, messages, sendMessage }) {
         <span ref={dummy}></span>
       </main>
 
-      <form onSubmit={handleSubmit}>
+      <form className="message-form" onSubmit={handleSubmit}>
         <input
           value={message}
           onChange={(e) => setMessage(e.target.value)}

@@ -58,7 +58,7 @@ body {
     background: #6649b8;
   }
   
-  form {
+  .message-form {
     height: 10vh;
     position: fixed;
     bottom: 0;
