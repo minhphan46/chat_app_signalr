@@ -1,25 +1,37 @@
-import { Col, Row } from "react-bootstrap";
 import MessageContainer from "./MessageContainer";
-import SendMessageForm from "./SendMessageForm";
+import { useState, useRef } from "react";
 
-const ChatRoom = ({ userId, messages, sendMessage }) => (
-  <div className="chat-room">
-    {/* <Row className="px-5 py-4">
-      <Col sm="12">
-        <h1 className="font-weight-light text-center">Chat Room</h1>
-      </Col>
-    </Row> */}
-    <main className="px-5 py-4">
-      <Col sm="12" className="message-container-wrapper">
+function ChatRoom({ userId, messages, sendMessage }) {
+  const dummy = useRef();
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    sendMessage(message);
+    setMessage("");
+    dummy.current.scrollIntoView({ behavior: "smooth" });
+  };
+
+  const [message, setMessage] = useState("");
+  return (
+    <>
+      <main>
         <MessageContainer userId={userId} messages={messages} />
-      </Col>
-    </main>
-    <Row className="px-5 py-4">
-      <Col sm="12">
-        <SendMessageForm sendMessage={sendMessage} />
-      </Col>
-    </Row>
-  </div>
-);
+        <span ref={dummy}></span>
+      </main>
+
+      <form onSubmit={handleSubmit}>
+        <input
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+          placeholder="Type your message here"
+        />
+
+        <button type="submit" disabled={!message}>
+          🕊️
+        </button>
+      </form>
+    </>
+  );
+}
 
 export default ChatRoom;

@@ -1,43 +1,39 @@
-import { Col, Row } from "react-bootstrap";
-import "../styles/MessageContainer.css"; // Import file CSS để định dạng
+import { Col } from "react-bootstrap";
 
 const MessageContainer = ({ userId, messages }) => (
-  <div className="message-container">
+  <main>
     {messages.map((msg, index) => {
       const isSystemMessage = msg.userId === 0;
       const isCurrentUser = msg.userId === userId;
 
+      const messageClass = isSystemMessage
+        ? "system"
+        : msg.userId === userId
+        ? "sent"
+        : "received";
+
       return (
-        <Row
-          key={index}
-          className={`message-row ${
-            isSystemMessage
-              ? "system-message"
-              : isCurrentUser
-              ? "current-user"
-              : "other-user"
-          }`}
-          noGutters
-        >
-          {!isSystemMessage && !isCurrentUser && (
-            <Col xs="auto" className="message-avatar">
-              <div className="avatar">
-                {msg.username.charAt(0).toUpperCase()}
+        <>
+          <div className={`message ${messageClass}`}>
+            {!isSystemMessage && !isCurrentUser && (
+              <Col xs="auto" className="message-avatar">
+                <div className="avatar">
+                  {msg.username.charAt(0).toUpperCase()}
+                </div>
+              </Col>
+            )}
+            {!isSystemMessage && !isCurrentUser && (
+              <div className="message-content">
+                <div className="message-username">{msg.username}</div>
+                <p>{msg.msg}</p>
               </div>
-            </Col>
-          )}
-          <Col
-            className={`message-bubble ${isCurrentUser ? "align-right" : ""}`}
-          >
-            <div className="message-content">
-              {!isSystemMessage && <strong>{msg.username}</strong>}
-              <p>{msg.msg}</p>
-            </div>
-          </Col>
-        </Row>
+            )}
+            {(isSystemMessage || isCurrentUser) && <p>{msg.msg}</p>}
+          </div>
+        </>
       );
     })}
-  </div>
+  </main>
 );
 
 export default MessageContainer;

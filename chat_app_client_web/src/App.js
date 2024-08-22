@@ -1,4 +1,3 @@
-import { Container, Row, Col } from "react-bootstrap";
 import "./App.css";
 import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -77,27 +76,33 @@ function App() {
   };
 
   return (
-    <div>
-      <main>
-        <Container>
-          <Row className="px-5 my-5">
-            <Col sm="12">
-              <h1 className="font-weight-light">Welcome to the ChatApp</h1>
-            </Col>
-          </Row>
-          {connection ? (
-            <ChatRoom
-              userId={userId}
-              messages={messages}
-              sendMessage={sendMessage}
-            ></ChatRoom>
-          ) : (
-            <WaitingRoom joinChatRoom={joinChatRoom}></WaitingRoom>
-          )}
-        </Container>
-      </main>
+    <div className="App">
+      <header>
+        <h1>⚛️🔥💬</h1>
+        <SignOut />
+      </header>
+
+      <section>
+        {connection ? (
+          <ChatRoom
+            userId={userId}
+            messages={messages}
+            sendMessage={sendMessage}
+          ></ChatRoom>
+        ) : (
+          <WaitingRoom joinChatRoom={joinChatRoom}></WaitingRoom>
+        )}
+      </section>
     </div>
   );
 }
 
 export default App;
+
+function SignOut() {
+  return (
+    <button className="sign-out" onClick={() => {}}>
+      Sign Out
+    </button>
+  );
+}
