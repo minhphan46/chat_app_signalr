@@ -1,6 +1,10 @@
 body {
     background-color: #282c34;
   }
+
+  h1 {
+    font-family: 'Dancing Script', cursive;
+  }
   
   .App {
     text-align: center;
@@ -179,20 +183,21 @@ body {
   }
   
   .message-avatar {
-    display: flex;
-    align-items: center;
+      display: flex;
+      align-items: center;
   }
   
   .avatar {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background-color: #82B1FF;
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 18px;
-    font-weight: bold;
-    margin-right: 10px;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: #82B1FF;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      font-weight: bold;
+      margin-right: 10px;
+      margin-top: 10px;
   }
