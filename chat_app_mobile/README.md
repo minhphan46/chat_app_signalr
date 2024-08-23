@@ -2,6 +2,10 @@
 
 A new Flutter project.
 
+# Link download APK:
+
+[App APK](https://drive.google.com/drive/folders/1sNM5P-0xCPJf-HCdjhtquut3Khh26Y0U?usp=drive_link)
+
 ## Getting Started
 
 This project is a starting point for a Flutter application.

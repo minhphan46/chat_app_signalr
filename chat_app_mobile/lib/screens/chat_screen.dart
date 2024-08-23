@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:math';
+import 'package:chat_app_mobile/core/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:signalr_core/signalr_core.dart';
 import '../models/message.dart';
@@ -79,7 +80,7 @@ class _ChatScreenState extends State<ChatScreen> {
   //set url and configs
   final connection = HubConnectionBuilder()
       .withUrl(
-          'https://app-chat-dev-001-czg2hthmanhxeycs.eastus-01.azurewebsites.net/chat',
+          SERVER_URL,
           HttpConnectionOptions(
             logging: (level, message) => print(
               "Connect the signalR: $level: $message",
