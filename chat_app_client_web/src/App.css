@@ -64,6 +64,66 @@ main::-webkit-scrollbar-thumb {
   width: 100%;
   display: flex;
   font-size: 1.5rem;
+  box-sizing: border-box;
+}
+
+.message-form input[type="file"] {
+  display: none;
+}
+
+.image-upload-label {
+  font-size: 1.5rem;
+  color: white;
+  cursor: pointer;
+  margin-right: 10px;
+  margin-top: 15px;
+}
+
+.image-preview-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-right: 10px;
+}
+
+.image-preview {
+  width: 50px;
+  height: 50px;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+.remove-image-button {
+  position: absolute;
+  top: 5px;
+  right: -5px;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 10px;
+}
+
+.message-form input {
+  line-height: 1.5;
+  flex-grow: 1;
+  font-size: 1.5rem;
+  background: rgb(58, 58, 58);
+  color: white;
+  outline: none;
+  border: none;
+  padding: 0 10px;
+}
+
+.message-form button {
+  width: 20%;
+  background-color: rgb(56, 56, 143);
 }
 
 form button {
@@ -197,4 +257,16 @@ img {
     font-weight: bold;
     margin-right: 10px;
     margin-top: 10px;
+}
+
+.image-preview {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.image-preview img {
+  max-height: 100px;
+  border-radius: 10px;
 }
