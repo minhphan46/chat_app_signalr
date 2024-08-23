@@ -64,6 +64,66 @@ main::-webkit-scrollbar-thumb {
   width: 100%;
   display: flex;
   font-size: 1.5rem;
+  box-sizing: border-box;
+}
+
+.message-form input[type="file"] {
+  display: none;
+}
+
+.image-upload-label {
+  font-size: 1.5rem;
+  color: white;
+  cursor: pointer;
+  margin-right: 10px;
+  margin-top: 15px;
+}
+
+.image-preview-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-right: 10px;
+}
+
+.image-preview {
+  width: 50px;
+  height: 50px;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+.remove-image-button {
+  position: absolute;
+  top: 5px;
+  right: -5px;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 10px;
+}
+
+.message-form input {
+  line-height: 1.5;
+  flex-grow: 1;
+  font-size: 1.5rem;
+  background: rgb(58, 58, 58);
+  color: white;
+  outline: none;
+  border: none;
+  padding: 0 10px;
+}
+
+.message-form button {
+  width: 20%;
+  background-color: rgb(56, 56, 143);
 }
 
 form button {
@@ -197,4 +257,66 @@ img {
     font-weight: bold;
     margin-right: 10px;
     margin-top: 10px;
+}
+
+.image-preview {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.image-preview img {
+  max-height: 100px;
+  border-radius: 10px;
+}
+
+.message-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.image-container {
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.message-image {
+  max-width: 100%;
+  height: 150px;
+  width: auto;
+  border-radius: 5px;
+}
+
+.sent .message-content {
+  align-items: flex-end; /* Align items at the end for the sent messages */
+  text-align: right;
+}
+
+.received .message-content {
+  align-items: flex-start; /* Align items at the start for the received messages */
+  text-align: left;
+}
+
+.message-content {
+  display: flex;
+  flex-direction: column;
+  max-width: 70%; /* Adjust as needed */
+}
+
+.message-timestamp {
+  font-size: 0.75rem;
+  color: #474747;
+  text-align: right; /* Align time to the right for sent messages */
+  margin-right: 15px;
+  margin-left: 15px;
+  margin-bottom: 0px;
+}
+
+.sent .message-timestamp {
+  text-align: right;
+}
+
+.received .message-timestamp {
+  text-align: left;
 }
