@@ -1,20 +1,7 @@
 import React from "react";
 import { Col } from "react-bootstrap";
-
-const getColorForUsername = (username) => {
-  if (!colorMap.has(username)) {
-    // Generate a random color
-    const letters = "0123456789ABCDEF";
-    let color = "#";
-    for (let i = 0; i < 6; i++) {
-      color += letters[Math.floor(Math.random() * 16)];
-    }
-    colorMap.set(username, color);
-  }
-  return colorMap.get(username);
-};
-
-const colorMap = new Map();
+import { getColorForUsername } from "../utils/avatar_color_util";
+import { formatTime } from "../utils/time_util";
 
 const MessageContainer = ({ userId, messages }) => (
   <main>
@@ -31,6 +18,18 @@ const MessageContainer = ({ userId, messages }) => (
       // Generate color for username
       const avatarColor = getColorForUsername(msg.username);
 
+      // Parse message content from JSON string
+      let textContent = null;
+      let imageContent = null;
+
+      try {
+        const parsedMsg = JSON.parse(msg.msg);
+        textContent = parsedMsg.text;
+        imageContent = parsedMsg.image;
+      } catch (error) {
+        textContent = msg.msg;
+      }
+
       return (
         <div key={index} className={`message ${messageClass}`}>
           {!isSystemMessage && !isCurrentUser && (
@@ -40,13 +39,29 @@ const MessageContainer = ({ userId, messages }) => (
               </div>
             </Col>
           )}
-          {!isSystemMessage && !isCurrentUser && (
-            <div className="message-content">
-              <div className="message-username">{msg.username}</div>
-              <p>{msg.msg}</p>
+          {isSystemMessage && textContent && <p>{textContent}</p>}
+
+          {!isSystemMessage && (
+            <div className={`message-content ${messageClass}`}>
+              {!isCurrentUser && (
+                <div className="message-username">{msg.username}</div>
+              )}
+              {imageContent && (
+                <div className="image-container">
+                  <img
+                    src={imageContent}
+                    alt="Message"
+                    className="message-image"
+                  />
+                </div>
+              )}
+              {textContent && <p>{textContent}</p>}
             </div>
           )}
-          {(isSystemMessage || isCurrentUser) && <p>{msg.msg}</p>}
+
+          {!isSystemMessage && msg.time && (
+            <span className="message-timestamp">{formatTime(msg.time)}</span>
+          )}
         </div>
       );
     })}

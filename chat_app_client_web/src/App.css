@@ -270,3 +270,53 @@ img {
   max-height: 100px;
   border-radius: 10px;
 }
+
+.message-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.image-container {
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.message-image {
+  max-width: 100%;
+  height: 150px;
+  width: auto;
+  border-radius: 5px;
+}
+
+.sent .message-content {
+  align-items: flex-end; /* Align items at the end for the sent messages */
+  text-align: right;
+}
+
+.received .message-content {
+  align-items: flex-start; /* Align items at the start for the received messages */
+  text-align: left;
+}
+
+.message-content {
+  display: flex;
+  flex-direction: column;
+  max-width: 70%; /* Adjust as needed */
+}
+
+.message-timestamp {
+  font-size: 0.75rem;
+  color: #474747;
+  text-align: right; /* Align time to the right for sent messages */
+  margin-right: 15px;
+  margin-left: 15px;
+  margin-bottom: 0px;
+}
+
+.sent .message-timestamp {
+  text-align: right;
+}
+
+.received .message-timestamp {
+  text-align: left;
+}

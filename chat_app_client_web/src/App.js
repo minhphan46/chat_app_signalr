@@ -37,12 +37,17 @@ function App() {
           console.log("Message received: ", messageObj);
 
           // Destructure the actual properties from the object
-          const { userId, userName: username, messageText: msg } = messageObj;
+          const {
+            userId,
+            userName: username,
+            messageText: msg,
+            createDate: time,
+          } = messageObj;
 
           // Append new message to the state
           setMessages((prevMessages) => [
             ...prevMessages,
-            { userId, username, msg },
+            { userId, username, msg, time },
           ]);
         } catch (error) {
           console.error("Error parsing message: ", error, res);

@@ -1,10 +1,12 @@
 import React, { useState, useRef, useEffect } from "react";
 import MessageContainer from "./MessageContainer";
+import { convertBase64 } from "../utils/image_util";
 
 function ChatRoom({ userId, messages, sendMessage }) {
   const dummy = useRef();
 
   const [message, setMessage] = useState("");
+  const [base64, setBase64] = useState("");
   const [selectedImage, setSelectedImage] = useState(null);
   const fileInputRef = useRef();
 
@@ -15,26 +17,35 @@ function ChatRoom({ userId, messages, sendMessage }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    sendMessage(message);
+
+    // Tạo đối tượng tin nhắn
+    const messagePayload = {
+      text: message,
+      image: base64,
+    };
+
+    // Chuyển đổi đối tượng thành chuỗi JSON
+    const messagePayloadString = JSON.stringify(messagePayload);
+
+    // Gửi tin nhắn dưới dạng chuỗi JSON
+    sendMessage(messagePayloadString);
+
     setMessage("");
     setSelectedImage(null);
+    setBase64("");
     dummy.current.scrollIntoView({ behavior: "smooth" });
   };
 
-  const handleImageChange = (e) => {
+  const uploadImage = async (e) => {
     const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setSelectedImage(reader.result);
-      };
-      reader.readAsDataURL(file);
-    }
+    const base64 = await convertBase64(file);
+    setBase64(base64);
+    setSelectedImage(URL.createObjectURL(file));
   };
 
   const removeImage = () => {
     setSelectedImage(null);
-    fileInputRef.current.value = null; // Reset giá trị input file
+    fileInputRef.current.value = null;
   };
 
   return (
@@ -48,7 +59,7 @@ function ChatRoom({ userId, messages, sendMessage }) {
         <input
           type="file"
           accept="image/*"
-          onChange={handleImageChange}
+          onChange={uploadImage}
           style={{ display: "none" }}
           id="image-upload"
           ref={fileInputRef}
@@ -73,7 +84,7 @@ function ChatRoom({ userId, messages, sendMessage }) {
           onChange={(e) => setMessage(e.target.value)}
           placeholder="Type your message here"
         />
-        <button type="submit" disabled={!message}>
+        <button type="submit" disabled={!message && !selectedImage}>
           🕊️
         </button>
       </form>
