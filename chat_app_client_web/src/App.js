@@ -22,7 +22,9 @@ function App() {
       setUsername(username);
       // initiate a connection
       const conn = new HubConnectionBuilder()
-        .withUrl("https://quick-streets-stand.loca.lt/chat")
+        .withUrl(
+          "https://app-chat-dev-001-czg2hthmanhxeycs.eastus-01.azurewebsites.net/chat"
+        )
         .configureLogging(LogLevel.Information)
         .build();
 

@@ -79,7 +79,7 @@ class _ChatScreenState extends State<ChatScreen> {
   //set url and configs
   final connection = HubConnectionBuilder()
       .withUrl(
-          'https://quick-streets-stand.loca.lt/chat',
+          'https://app-chat-dev-001-czg2hthmanhxeycs.eastus-01.azurewebsites.net/chat',
           HttpConnectionOptions(
             logging: (level, message) => print(
               "Connect the signalR: $level: $message",

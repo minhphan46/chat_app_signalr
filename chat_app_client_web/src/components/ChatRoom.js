@@ -1,8 +1,15 @@
+import { useEffect, useState, useRef } from "react";
 import MessageContainer from "./MessageContainer";
-import { useState, useRef } from "react";
 
 function ChatRoom({ userId, messages, sendMessage }) {
   const dummy = useRef();
+
+  const [message, setMessage] = useState("");
+
+  // useEffect để tự động cuộn xuống cuối khi có tin nhắn mới
+  useEffect(() => {
+    dummy.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -11,7 +18,6 @@ function ChatRoom({ userId, messages, sendMessage }) {
     dummy.current.scrollIntoView({ behavior: "smooth" });
   };
 
-  const [message, setMessage] = useState("");
   return (
     <>
       <main>
@@ -25,7 +31,6 @@ function ChatRoom({ userId, messages, sendMessage }) {
           onChange={(e) => setMessage(e.target.value)}
           placeholder="Type your message here"
         />
-
         <button type="submit" disabled={!message}>
           🕊️
         </button>
