@@ -1,9 +1,8 @@
-﻿using ChatApp.DataServices;
-using ChatApp.Hubs;
+﻿using ChatApp.Hubs;
 using ChatApp.Models;
+using ChatApp.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
-using MongoDB.Driver;
 
 namespace ChatApp.Controllers
 {
@@ -12,11 +11,11 @@ namespace ChatApp.Controllers
     public class MessageController : ControllerBase
     {
         private readonly IHubContext<ChatHub> _hub;
-        private readonly IMongoCollection<MessageModel>? _messages;
-        public MessageController(IHubContext<ChatHub> hub, DbService dbService)
+        private readonly MessageRepository _repository;
+        public MessageController(IHubContext<ChatHub> hub, MessageRepository repository)
         {
             _hub = hub;
-            _messages = dbService.Database?.GetCollection<MessageModel>("MessageModel");
+            _repository = repository;
         }
 
         [HttpGet("[action]")]
@@ -37,14 +36,13 @@ namespace ChatApp.Controllers
         [HttpGet]
         public async Task<IEnumerable<MessageModel>> GetAllMessages()
         {
-            return await _messages.Find(FilterDefinition<MessageModel>.Empty).ToListAsync();
+            return await _repository.GetAllMessages();
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<MessageModel>> GetMessageById(string id)
         {
-            var filter = Builders<MessageModel>.Filter.Eq(x => x.Id, id);
-            var messages = _messages.Find(filter).FirstOrDefault();
+            var messages = await _repository.GetMessageById(id);
             return messages is not null ? Ok(messages) : NotFound();
         }
 
@@ -60,25 +58,21 @@ namespace ChatApp.Controllers
                 CreateDate = DateTime.Now
             };
 
-            await _messages.InsertOneAsync(message);
+            await _repository.CreateMessage(message);
             return CreatedAtAction(nameof(CreateMessage), new { id = message.Id }, message);
         }
 
         [HttpPut]
         public async Task<ActionResult> UpdateMessage(MessageModel message)
         {
-            var filter = Builders<MessageModel>.Filter.Eq(x => x.Id, message.Id);
-
-            await _messages.ReplaceOneAsync(filter, message);
+            await _repository.UpdateMessage(message);
             return Ok(message);
         }
 
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteMessage(String id)
         {
-            var filter = Builders<MessageModel>.Filter.Eq(x => x.Id, id);
-
-            await _messages.DeleteOneAsync(filter);
+            await _repository.DeleteMessage(id);
             return Ok();
         }
     }

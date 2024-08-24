@@ -1,4 +1,5 @@
 ﻿using ChatApp.Models;
+using ChatApp.Repositories;
 using Microsoft.AspNetCore.SignalR;
 
 namespace ChatApp.Hubs
@@ -6,25 +7,30 @@ namespace ChatApp.Hubs
     public class ChatHub : Hub
     {
         private readonly ILogger<ChatHub> _logger;
+        private readonly MessageRepository _repository;
 
-        public ChatHub(ILogger<ChatHub> logger)
+        public ChatHub(ILogger<ChatHub> logger, MessageRepository repository)
         {
             _logger = logger;
+            _repository = repository;
         }
 
         public async Task SendUserMessage(string UserName, int RandomUserId, string Message)
         {
             _logger.LogInformation($"[All][Send Message] User {UserName}: {Message}");
 
-            MessageModel MessageModel = new MessageModel
+            MessageModel messageModel = new MessageModel
             {
-                CreateDate = DateTime.Now,
-                MessageText = Message,
                 UserId = RandomUserId,
-                UserName = UserName
+                UserName = UserName,
+                MessageText = Message,
+                CreateDate = DateTime.Now
             };
 
-            await Clients.All.SendAsync("ReceiveMessage", MessageModel);
+
+            await _repository.CreateMessage(messageModel);
+
+            await Clients.All.SendAsync("ReceiveMessage", messageModel);
         }
 
         public async Task JoinUSer(string userName, int userId)
