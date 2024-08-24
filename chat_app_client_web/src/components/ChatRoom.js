@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import MessageContainer from "./MessageContainer";
 import { convertBase64 } from "../utils/image_util";
 
@@ -9,11 +9,6 @@ function ChatRoom({ userId, messages, sendMessage }) {
   const [base64, setBase64] = useState("");
   const [selectedImage, setSelectedImage] = useState(null);
   const fileInputRef = useRef();
-
-  // useEffect để tự động cuộn xuống cuối khi có tin nhắn mới
-  useEffect(() => {
-    dummy.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
