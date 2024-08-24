@@ -1,14 +1,23 @@
-import React, { useEffect, useRef } from "react";
-import { Col } from "react-bootstrap";
+import React, { useEffect, useRef, useState } from "react";
+import { Col, Modal } from "react-bootstrap";
 import { getColorForUsername } from "../utils/avatar_color_util";
 import { formatTime } from "../utils/time_util";
 
 const MessageContainer = ({ userId, messages }) => {
+  const [selectedImage, setSelectedImage] = useState(null);
   const messagesEndRef = useRef(null);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
+
+  const handleImageClick = (imageUrl) => {
+    setSelectedImage(imageUrl);
+  };
+
+  const handleClose = () => {
+    setSelectedImage(null);
+  };
 
   return (
     <main>
@@ -60,6 +69,7 @@ const MessageContainer = ({ userId, messages }) => {
                       src={imageContent}
                       alt="Message"
                       className="message-image"
+                      onClick={() => handleImageClick(imageContent)}
                     />
                   </div>
                 )}
@@ -74,6 +84,17 @@ const MessageContainer = ({ userId, messages }) => {
         );
       })}
       <div ref={messagesEndRef} />
+
+      <Modal show={!!selectedImage} onHide={handleClose} centered>
+        <Modal.Body style={{ backgroundColor: "black" }}>
+          <div className="image-modal-container">
+            <button className="close-modal-button" onClick={handleClose}>
+              &times;
+            </button>
+            <img src={selectedImage} alt="Selected" className="modal-image" />
+          </div>
+        </Modal.Body>
+      </Modal>
     </main>
   );
 };
