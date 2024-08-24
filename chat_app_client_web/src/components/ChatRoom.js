@@ -1,42 +1,35 @@
 import React, { useState, useRef } from "react";
 import MessageContainer from "./MessageContainer";
 import { convertBase64 } from "../utils/image_util";
-import debounce from "lodash.debounce";
 
 function ChatRoom({ userId, messages, sendMessage }) {
   const dummy = useRef();
+
   const [message, setMessage] = useState("");
   const [base64, setBase64] = useState("");
   const [selectedImage, setSelectedImage] = useState(null);
   const fileInputRef = useRef();
 
-  // Sử dụng useRef để giữ debounce function
-  const debouncedSendMessage = useRef(
-    debounce((messagePayloadString) => {
-      sendMessage(messagePayloadString);
-    }, 500)
-  ).current;
+  const handleSubmit = (e) => {
+    e.preventDefault();
 
-  const handleSendMessage = () => {
+    // Tạo đối tượng tin nhắn
     const messagePayload = {
       text: message,
       image: base64,
     };
 
+    // Chuyển đổi đối tượng thành chuỗi JSON
     const messagePayloadString = JSON.stringify(messagePayload);
 
-    debouncedSendMessage(messagePayloadString);
+    // Gửi tin nhắn dưới dạng chuỗi JSON
+    sendMessage(messagePayloadString);
 
     setMessage("");
     setSelectedImage(null);
     setBase64("");
     fileInputRef.current.value = null;
     dummy.current.scrollIntoView({ behavior: "smooth" });
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    handleSendMessage();
   };
 
   const uploadImage = async (e) => {
