@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Col, Form, FormControl, Row, Button, Spinner } from "react-bootstrap";
+import {Form, FormControl, Button, Spinner } from "react-bootstrap";
 
 const WaitingRoom = ({ joinChatRoom }) => {
   const [username, setUsername] = useState("");
