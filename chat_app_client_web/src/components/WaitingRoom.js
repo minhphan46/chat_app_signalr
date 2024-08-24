@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { Col, Form, FormControl, Row, Button } from "react-bootstrap";
+import { Col, Form, FormControl, Row, Button, Spinner } from "react-bootstrap";
 
 const WaitingRoom = ({ joinChatRoom }) => {
   const [username, setUsername] = useState("");
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -12,6 +13,7 @@ const WaitingRoom = ({ joinChatRoom }) => {
       return;
     }
     setError("");
+    setIsLoading(true); // Start loading
     joinChatRoom(username);
   };
 
@@ -26,6 +28,7 @@ const WaitingRoom = ({ joinChatRoom }) => {
                 onChange={(e) => setUsername(e.target.value)}
                 value={username}
                 isInvalid={!!error}
+                disabled={isLoading} // Disable input when loading
               />
               <FormControl.Feedback type="invalid">
                 {error}
@@ -33,8 +36,26 @@ const WaitingRoom = ({ joinChatRoom }) => {
             </Form.Group>
           </Col>
         </Row>
-        <Button variant="success" type="submit" className="join-button">
-          Join
+        <Button
+          variant="success"
+          type="submit"
+          className="join-button"
+          disabled={isLoading} // Disable button when loading
+        >
+          {isLoading ? (
+            <>
+              <Spinner
+                as="span"
+                animation="border"
+                size="sm"
+                role="status"
+                aria-hidden="true"
+              />{" "}
+              Loading...
+            </>
+          ) : (
+            "Join"
+          )}
         </Button>
       </Form>
     </div>
