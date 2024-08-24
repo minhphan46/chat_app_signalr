@@ -75,7 +75,8 @@ main::-webkit-scrollbar-thumb {
   font-size: 1.5rem;
   color: white;
   cursor: pointer;
-  margin-right: 10px;
+  margin-right: 15px;
+  margin-left: 10px;
   margin-top: 15px;
 }
 

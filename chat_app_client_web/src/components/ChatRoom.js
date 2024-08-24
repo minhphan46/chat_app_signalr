@@ -28,6 +28,7 @@ function ChatRoom({ userId, messages, sendMessage }) {
     setMessage("");
     setSelectedImage(null);
     setBase64("");
+    fileInputRef.current.value = null;
     dummy.current.scrollIntoView({ behavior: "smooth" });
   };
 
@@ -80,7 +81,7 @@ function ChatRoom({ userId, messages, sendMessage }) {
           placeholder="Type your message here"
         />
         <button type="submit" disabled={!message && !selectedImage}>
-          🕊️
+          👉
         </button>
       </form>
     </>
