@@ -1,5 +1,4 @@
-﻿using ChatApp.DataServices;
-using ChatApp.Models;
+﻿using ChatApp.Models;
 using Microsoft.AspNetCore.SignalR;
 
 namespace ChatApp.Hubs
@@ -8,7 +7,7 @@ namespace ChatApp.Hubs
     {
         private readonly ILogger<ChatHub> _logger;
 
-        public ChatHub(ShareDb shareDb, ILogger<ChatHub> logger)
+        public ChatHub(ILogger<ChatHub> logger)
         {
             _logger = logger;
         }
