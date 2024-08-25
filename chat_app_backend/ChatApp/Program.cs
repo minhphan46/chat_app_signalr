@@ -1,7 +1,12 @@
 using ChatApp.DataServices;
 using ChatApp.Hubs;
+using ChatApp.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddSingleton<DbService>();
+
+builder.Services.AddScoped<MessageRepository>();
 
 // Add services to the container.
 builder.Services.AddSignalR();
@@ -21,7 +26,6 @@ builder.Services.AddCors(opt =>
     });
 });
 
-builder.Services.AddSingleton<ShareDb>();
 
 var app = builder.Build();
 

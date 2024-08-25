@@ -56,7 +56,7 @@ function App() {
 
       // start the connection
       await conn.start();
-      await conn.invoke("JoinUSer", username, userId);
+      await conn.invoke("JoinUser", username, userId);
 
       // set the connection state
       setConnection(conn);
