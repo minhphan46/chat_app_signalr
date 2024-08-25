@@ -27,8 +27,7 @@ namespace ChatApp.Hubs
                 CreateDate = DateTime.Now
             };
 
-
-            // await _repository.CreateMessage(messageModel);
+            _repository.CreateMessage(messageModel);
 
             await Clients.All.SendAsync("ReceiveMessage", messageModel);
         }
