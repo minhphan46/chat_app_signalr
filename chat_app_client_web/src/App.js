@@ -4,6 +4,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import WaitingRoom from "./components/WaitingRoom";
 import ChatRoom from "./components/ChatRoom";
 import { HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
+import { SERVER_URL } from "./constants/ApiUrl";
 
 function App() {
   const [connection, setConnection] = useState(null);
@@ -22,10 +23,7 @@ function App() {
       setUsername(username);
       // initiate a connection
       const conn = new HubConnectionBuilder()
-        .withUrl(
-          // "https://app-chat-dev-001-czg2hthmanhxeycs.eastus-01.azurewebsites.net/chat"
-          "http://localhost:5260/chat"
-        )
+        .withUrl(SERVER_URL)
         .configureLogging(LogLevel.Information)
         .build();
 
