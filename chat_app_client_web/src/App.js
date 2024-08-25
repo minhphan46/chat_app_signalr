@@ -23,8 +23,7 @@ function App() {
       // initiate a connection
       const conn = new HubConnectionBuilder()
         .withUrl(
-          // "https://app-chat-dev-001-czg2hthmanhxeycs.eastus-01.azurewebsites.net/chat"
-          "http://localhost:5260/chat"
+          "https://app-chat-dev-001-czg2hthmanhxeycs.eastus-01.azurewebsites.net/chat"
         )
         .configureLogging(LogLevel.Information)
         .build();
@@ -57,7 +56,7 @@ function App() {
 
       // start the connection
       await conn.start();
-      await conn.invoke("JoinUSer", username, userId);
+      await conn.invoke("JoinUser", username, userId);
 
       // set the connection state
       setConnection(conn);

@@ -28,12 +28,12 @@ namespace ChatApp.Hubs
             };
 
 
-            await _repository.CreateMessage(messageModel);
+            // await _repository.CreateMessage(messageModel);
 
             await Clients.All.SendAsync("ReceiveMessage", messageModel);
         }
 
-        public async Task JoinUSer(string userName, int userId)
+        public async Task JoinUser(string userName, int userId)
         {
             _logger.LogInformation($"[All][Join] Id: {userId}, User: {userName}");
 
