@@ -13,9 +13,18 @@ namespace ChatApp.Repositories
             _messages = dbService.Database?.GetCollection<MessageModel>("MessageModel");
         }
 
-        public async Task<IEnumerable<MessageModel>> GetAllMessages()
+        public async Task<IEnumerable<MessageModel>> GetAllMessages(string? sortBy, bool isAscending = true, int pageNumber = 1, int pageSize = 10)
         {
-            return await _messages.Find(FilterDefinition<MessageModel>.Empty).ToListAsync();
+            var sort = Builders<MessageModel>.Sort.Ascending("CreateDate");
+
+            if (!string.IsNullOrWhiteSpace(sortBy))
+            {
+                sort = isAscending ? Builders<MessageModel>.Sort.Ascending(sortBy) : Builders<MessageModel>.Sort.Descending(sortBy);
+            }
+
+            var skipResults = (pageNumber - 1) * pageSize;
+
+            return await _messages.Find(FilterDefinition<MessageModel>.Empty).Sort(sort).Skip(skipResults).Limit(pageSize).ToListAsync();
         }
 
         public async Task<MessageModel> GetMessageById(string id)
