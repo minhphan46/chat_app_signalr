@@ -4,7 +4,9 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import WaitingRoom from "./components/WaitingRoom";
 import ChatRoom from "./components/ChatRoom";
 import { HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
-import { SERVER_URL } from "./constants/ApiUrl";
+import SignOut from "./components/SignOut";
+import { API_CHAT_URL, API_GET_MESSAGES_URL } from "./constants/ApiUrl";
+import axios from "axios";
 
 function App() {
   const [connection, setConnection] = useState(null);
@@ -23,7 +25,7 @@ function App() {
       setUsername(username);
       // initiate a connection
       const conn = new HubConnectionBuilder()
-        .withUrl(SERVER_URL)
+        .withUrl(API_CHAT_URL)
         .configureLogging(LogLevel.Information)
         .build();
 
@@ -92,6 +94,31 @@ function App() {
     }
   };
 
+  const fetchOldMessages = async () => {
+    try {
+      const response = await axios.get(API_GET_MESSAGES_URL);
+      const oldMessages = response.data;
+
+      oldMessages.forEach((messageObj) => {
+        // Destructure the actual properties from the object
+        const {
+          userId,
+          userName: username,
+          messageText: msg,
+          createDate: time,
+        } = messageObj;
+
+        // Append new message to the state
+        setMessages((prevMessages) => [
+          { userId, username, msg, time },
+          ...prevMessages,
+        ]);
+      });
+    } catch (error) {
+      console.error("Error fetching old messages: ", error);
+    }
+  };
+
   return (
     <div className="App">
       <header>
@@ -105,6 +132,7 @@ function App() {
             userId={userId}
             messages={messages}
             sendMessage={sendMessage}
+            fetchOldMessages={fetchOldMessages}
           ></ChatRoom>
         ) : (
           <WaitingRoom joinChatRoom={joinChatRoom}></WaitingRoom>
@@ -115,11 +143,3 @@ function App() {
 }
 
 export default App;
-
-function SignOut({ logout }) {
-  return (
-    <button className="sign-out" onClick={() => logout()}>
-      Out
-    </button>
-  );
-}

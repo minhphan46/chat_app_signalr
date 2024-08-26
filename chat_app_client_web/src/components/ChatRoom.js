@@ -1,8 +1,8 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import MessageContainer from "./MessageContainer";
 import { convertBase64 } from "../utils/image_util";
 
-function ChatRoom({ userId, messages, sendMessage }) {
+function ChatRoom({ userId, messages, sendMessage, fetchOldMessages }) {
   const dummy = useRef();
 
   const [message, setMessage] = useState("");
@@ -10,19 +10,24 @@ function ChatRoom({ userId, messages, sendMessage }) {
   const [selectedImage, setSelectedImage] = useState(null);
   const fileInputRef = useRef();
 
+  useEffect(() => {
+    fetchOldMessages();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Tạo đối tượng tin nhắn
+    // Create message payload
     const messagePayload = {
       text: message,
       image: base64,
     };
 
-    // Chuyển đổi đối tượng thành chuỗi JSON
+    // Convert payload to JSON string
     const messagePayloadString = JSON.stringify(messagePayload);
 
-    // Gửi tin nhắn dưới dạng chuỗi JSON
+    // Send message as JSON string
     sendMessage(messagePayloadString);
 
     setMessage("");
