@@ -3,17 +3,20 @@ import MessageContainer from "./MessageContainer";
 import { convertBase64 } from "../utils/image_util";
 
 function ChatRoom({ userId, messages, sendMessage, fetchOldMessages }) {
+  const hasFetchedMessages = useRef(false); // Use a ref to track whether messages have been fetched
   const dummy = useRef();
-
   const [message, setMessage] = useState("");
   const [base64, setBase64] = useState("");
   const [selectedImage, setSelectedImage] = useState(null);
   const fileInputRef = useRef();
 
   useEffect(() => {
-    fetchOldMessages();
+    if (!hasFetchedMessages.current) {
+      fetchOldMessages();
+      hasFetchedMessages.current = true; // Set the ref to true after fetching messages
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, []); // Ensure this effect runs only once
 
   const handleSubmit = (e) => {
     e.preventDefault();

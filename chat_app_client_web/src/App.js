@@ -88,6 +88,7 @@ function App() {
       if (connection) {
         await connection.stop();
         setConnection(null);
+        setMessages([]);
       }
     } catch (error) {
       console.error("Leave chat room error: ", error);
