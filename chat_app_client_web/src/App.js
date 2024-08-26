@@ -7,12 +7,15 @@ import { HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
 import SignOut from "./components/SignOut";
 import { API_CHAT_URL, API_GET_MESSAGES_URL } from "./constants/ApiUrl";
 import axios from "axios";
+import { Form } from "react-bootstrap";
 
 function App() {
   const [connection, setConnection] = useState(null);
   const [messages, setMessages] = useState([]);
   const [userId, setUserId] = useState(0);
   const [username, setUsername] = useState("");
+  const [isPrivate, setIsPrivate] = useState(false); // State for private chat toggle
+  const [roomId, setRoomId] = useState(""); // State for RoomID
 
   // generate random user id when component mounts
   useEffect(() => {
@@ -20,9 +23,14 @@ function App() {
     setUserId(randomId);
   }, []);
 
-  const joinChatRoom = async (username) => {
+  const handlePrivateToggle = () => {
+    setIsPrivate(!isPrivate);
+  };
+
+  const joinChatRoom = async (username, roomId = "") => {
     try {
       setUsername(username);
+      setRoomId(roomId); // Save the RoomID if provided
       // initiate a connection
       const conn = new HubConnectionBuilder()
         .withUrl(API_CHAT_URL)
@@ -123,7 +131,17 @@ function App() {
   return (
     <div className="App">
       <header>
-        <h1>Chat App💬</h1>
+        {!connection && <h1>Chat App💬</h1>}
+        {connection && <h1>{isPrivate ? `Room ${roomId}` : "Public Chat"}</h1>}
+        {!connection && (
+          <Form.Check
+            type="switch"
+            id="private-chat-switch"
+            label={isPrivate ? "Private Chat" : "Public Chat"}
+            checked={isPrivate}
+            onChange={handlePrivateToggle}
+          />
+        )}
         {connection && <SignOut logout={leaveChatRoom} />}
       </header>
 
@@ -134,9 +152,11 @@ function App() {
             messages={messages}
             sendMessage={sendMessage}
             fetchOldMessages={fetchOldMessages}
-          ></ChatRoom>
+            isPrivate={isPrivate}
+            roomId={roomId}
+          />
         ) : (
-          <WaitingRoom joinChatRoom={joinChatRoom}></WaitingRoom>
+          <WaitingRoom joinChatRoom={joinChatRoom} isPrivate={isPrivate} />
         )}
       </section>
     </div>
