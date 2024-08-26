@@ -5,7 +5,7 @@ import WaitingRoom from "./components/WaitingRoom";
 import ChatRoom from "./components/ChatRoom";
 import { HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
 import SignOut from "./components/SignOut";
-import { API_CHAT_URL, API_GET_MESSAGES_URL } from "./constants/ApiUrl";
+import { API_CHAT_URL, GetAPIMessagesUrl } from "./constants/ApiUrl";
 import axios from "axios";
 import { Form } from "react-bootstrap";
 
@@ -168,7 +168,7 @@ function App() {
 
   const fetchOldMessages = async () => {
     try {
-      const response = await axios.get(API_GET_MESSAGES_URL);
+      const response = await axios.get(GetAPIMessagesUrl(roomId));
       const oldMessages = response.data;
 
       oldMessages.forEach((messageObj) => {

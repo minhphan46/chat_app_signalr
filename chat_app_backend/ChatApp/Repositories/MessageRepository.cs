@@ -13,8 +13,16 @@ namespace ChatApp.Repositories
             _messages = dbService.Database?.GetCollection<MessageModel>("MessageModel");
         }
 
-        public async Task<IEnumerable<MessageModel>> GetAllMessages(string? sortBy, bool isAscending = true, int pageNumber = 1, int pageSize = 10)
+        public async Task<IEnumerable<MessageModel>> GetAllMessages(string? filterOn, string? filterQuery, string? sortBy, bool isAscending = true, int pageNumber = 1, int pageSize = 10)
         {
+            // Filter
+            var filter = Builders<MessageModel>.Filter.Empty;
+            if (!string.IsNullOrWhiteSpace(filterOn))
+            {
+                filter = Builders<MessageModel>.Filter.Eq(filterOn, filterQuery);
+            }
+
+            // Sort
             var sort = Builders<MessageModel>.Sort.Ascending("CreateDate");
 
             if (!string.IsNullOrWhiteSpace(sortBy))
@@ -24,7 +32,7 @@ namespace ChatApp.Repositories
 
             var skipResults = (pageNumber - 1) * pageSize;
 
-            return await _messages.Find(FilterDefinition<MessageModel>.Empty).Sort(sort).Skip(skipResults).Limit(pageSize).ToListAsync();
+            return await _messages.Find(filter).Sort(sort).Skip(skipResults).Limit(pageSize).ToListAsync();
         }
 
         public async Task<MessageModel> GetMessageById(string id)

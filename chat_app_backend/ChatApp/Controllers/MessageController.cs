@@ -35,9 +35,13 @@ namespace ChatApp.Controllers
 
         // GET: /api/messages?filterOn=roomId&filterQuery=123&sortBy=Name&isAscending=true&pageNumber=1&pageSize=10
         [HttpGet]
-        public async Task<IEnumerable<MessageModel>> GetAllMessages([FromQuery] string? sortBy, [FromQuery] bool? isAscending, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
+        public async Task<IEnumerable<MessageModel>> GetAllMessages(
+            [FromQuery] string? filterOn, [FromQuery] string? filterQuery,
+            [FromQuery] string? sortBy, [FromQuery] bool? isAscending,
+            [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10
+        )
         {
-            return await _repository.GetAllMessages(sortBy, isAscending ?? true, pageNumber, pageSize);
+            return await _repository.GetAllMessages(filterOn, filterQuery, sortBy, isAscending ?? true, pageNumber, pageSize);
         }
 
         [HttpGet("{id}")]
