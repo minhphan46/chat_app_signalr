@@ -28,6 +28,12 @@ function App() {
   };
 
   const joinChatRoom = async (username, roomId = "") => {
+    isPrivate
+      ? joinPrivateChatRoom(username, roomId)
+      : joinPublicChatRoom(username);
+  };
+
+  const joinPublicChatRoom = async (username) => {
     try {
       setUsername(username);
       setRoomId(roomId); // Save the RoomID if provided
@@ -74,9 +80,66 @@ function App() {
     }
   };
 
+  const joinPrivateChatRoom = async (username, roomId) => {
+    try {
+      setUsername(username);
+      setRoomId(roomId); // Save the RoomID if provided
+      // initiate a connection
+      const conn = new HubConnectionBuilder()
+        .withUrl(API_CHAT_URL)
+        .configureLogging(LogLevel.Information)
+        .build();
+
+      // setup connection listeners
+      conn.on("ReceiveMessageChatRoom", (res) => {
+        try {
+          // Assume the response object has userName, messageText properties
+          const messageObj = res;
+
+          console.log("Message received: ", messageObj);
+
+          // Destructure the actual properties from the object
+          const {
+            userId,
+            userName: username,
+            messageText: msg,
+            createDate: time,
+          } = messageObj;
+
+          // Append new message to the state
+          setMessages((prevMessages) => [
+            ...prevMessages,
+            { userId, username, msg, time },
+          ]);
+        } catch (error) {
+          console.error("Error parsing message: ", error, res);
+        }
+      });
+
+      // start the connection
+      await conn.start();
+      await conn.invoke("JoindSpecificChatRoom", username, userId, roomId);
+
+      // set the connection state
+      setConnection(conn);
+    } catch (error) {
+      console.error("Connection error: ", error);
+    }
+  };
+
   const sendMessage = async (messageText) => {
     try {
       if (connection) {
+        if (isPrivate) {
+          await connection.invoke(
+            "SendMessageChatRoom",
+            username,
+            userId,
+            messageText,
+            roomId
+          );
+          return;
+        }
         await connection.invoke(
           "SendUserMessage",
           username,
