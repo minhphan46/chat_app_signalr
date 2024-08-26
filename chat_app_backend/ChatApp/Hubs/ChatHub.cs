@@ -1,6 +1,7 @@
 ﻿using ChatApp.Models;
 using ChatApp.Repositories;
 using Microsoft.AspNetCore.SignalR;
+using System.Collections.Concurrent;
 
 namespace ChatApp.Hubs
 {
@@ -8,6 +9,8 @@ namespace ChatApp.Hubs
     {
         private readonly ILogger<ChatHub> _logger;
         private readonly MessageRepository _repository;
+
+        private static ConcurrentDictionary<string, string> ConnectedUsers = new ConcurrentDictionary<string, string>();
 
         public ChatHub(ILogger<ChatHub> logger, MessageRepository repository)
         {
@@ -36,14 +39,17 @@ namespace ChatApp.Hubs
         {
             _logger.LogInformation($"[All][Join] Id: {userId}, User: {userName}");
 
-            MessageModel MessageModel = new MessageModel
+            MessageModel messageModel = new MessageModel
             {
                 CreateDate = DateTime.Now,
                 MessageText = userName + " joined chat",
                 UserId = 0,
                 UserName = "system"
             };
-            await Clients.All.SendAsync("ReceiveMessage", MessageModel);
+
+            ConnectedUsers.TryAdd(Context.ConnectionId, userName);
+
+            await Clients.All.SendAsync("ReceiveMessage", messageModel);
         }
 
         public async Task JoindSpecificChatRoom(string userName, int userId, string roomId)
@@ -52,7 +58,7 @@ namespace ChatApp.Hubs
 
             _logger.LogInformation($"[{roomId}][Join] Id: {userId}, User: {userName}");
 
-            MessageModel MessageModel = new MessageModel
+            MessageModel messageModel = new MessageModel
             {
                 CreateDate = DateTime.Now,
                 MessageText = userName + $" joined {roomId}.",
@@ -61,7 +67,9 @@ namespace ChatApp.Hubs
                 RoomId = roomId
             };
 
-            await Clients.Group(roomId).SendAsync("JoindSpecificChatRoom", MessageModel);
+            ConnectedUsers.TryAdd(Context.ConnectionId, userName);
+
+            await Clients.Group(roomId).SendAsync("JoindSpecificChatRoom", messageModel);
         }
 
         public async Task SendMessageChatRoom(string UserName, int RandomUserId, string Message, string roomId)
@@ -78,6 +86,32 @@ namespace ChatApp.Hubs
             };
             _logger.LogInformation(MessageModel.MessageText);
             await Clients.Group(roomId).SendAsync("ReceiveMessageChatRoom", MessageModel);
+        }
+
+        public override async Task OnDisconnectedAsync(Exception? exception)
+        {
+            // Get the user name with the connection id
+            var userName = Context.ConnectionId;
+
+            if (ConnectedUsers.TryGetValue(Context.ConnectionId, out string findUsername))
+            {
+                userName = findUsername;
+            }
+
+            _logger.LogInformation($"[Disconnected] User Diconnected: {userName}");
+
+            MessageModel MessageModel = new MessageModel
+            {
+                CreateDate = DateTime.Now,
+                MessageText = userName + " left chat",
+                UserId = 0,
+                UserName = "system"
+            };
+            await Clients.All.SendAsync("ReceiveMessage", MessageModel);
+
+            ConnectedUsers.TryRemove(Context.ConnectionId, out _);
+
+            await base.OnDisconnectedAsync(exception);
         }
     }
 }
