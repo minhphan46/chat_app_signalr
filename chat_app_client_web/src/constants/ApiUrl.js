@@ -1,6 +1,6 @@
 const SERVER_URL =
-  // "https://app-chat-dev-001-czg2hthmanhxeycs.eastus-01.azurewebsites.net";
-  "http://localhost:5260";
+  "https://app-chat-dev-001-czg2hthmanhxeycs.eastus-01.azurewebsites.net";
+// "http://localhost:5260";
 
 const CHAT_ENDPOINT = "/chat";
 
