@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import MessageContainer from "./MessageContainer";
-import { convertBase64 } from "../utils/image_util";
+import { convertBase64 } from "../services/ImageService";
 
 function ChatRoom({ userId, messages, sendMessage, fetchOldMessages }) {
   const hasFetchedMessages = useRef(false); // Use a ref to track whether messages have been fetched
