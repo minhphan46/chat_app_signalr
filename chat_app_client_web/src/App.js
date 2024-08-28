@@ -10,8 +10,6 @@ import {
   joinPrivateChatRoom,
   sendMessage,
   leaveChatRoom,
-  fetchOldMessages,
-  sendMessageToUser,
 } from "./services/ChatService";
 import { generateKeyAsync } from "./services/E2EEService";
 
@@ -99,23 +97,10 @@ function App() {
                 username,
                 userId,
                 messageText,
-                roomId
+                roomId,
+                secret
               )
             }
-            sendMessageToUser={(targetUserId, messageText) =>
-              sendMessageToUser(
-                targetUserId,
-                connection,
-                isPrivate,
-                username,
-                userId,
-                messageText,
-                roomId
-              )
-            }
-            fetchOldMessages={() => fetchOldMessages(roomId, setMessages)}
-            isPrivate={isPrivate}
-            roomId={roomId}
           />
         ) : (
           <WaitingRoom joinChatRoom={joinChatRoom} isPrivate={isPrivate} />

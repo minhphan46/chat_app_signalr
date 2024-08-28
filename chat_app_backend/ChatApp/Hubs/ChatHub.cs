@@ -105,13 +105,8 @@ namespace ChatApp.Hubs
                 RoomId = roomId
             };
 
-            UserModel userModel = new UserModel
-            {
-                UserId = userId,
-                UserName = userName,
-                RoomId = roomId,
-                ConnectionId = Context.ConnectionId,
-            };
+            // send message user join
+            await Clients.Group(roomId).SendAsync("ReceiveMessageChatRoom", messageModel);
 
             // get first user in the room
             var firstUser = ConnectedUsers.Values.FirstOrDefault(x => x.RoomId == roomId);
@@ -130,9 +125,16 @@ namespace ChatApp.Hubs
                 UserPublicKey.TryAdd(userId, publickey);
             }
 
-            ConnectedUsers.TryAdd(Context.ConnectionId, userModel);
+            // add user to connected user
+            UserModel userModel = new UserModel
+            {
+                UserId = userId,
+                UserName = userName,
+                RoomId = roomId,
+                ConnectionId = Context.ConnectionId,
+            };
 
-            await Clients.Group(roomId).SendAsync("ReceiveMessageChatRoom", messageModel);
+            ConnectedUsers.TryAdd(Context.ConnectionId, userModel);
         }
 
         public async Task SendMessageChatRoom(string UserName, int RandomUserId, string Message, string roomId)
@@ -186,7 +188,7 @@ namespace ChatApp.Hubs
                 user = findUser;
             }
 
-            _logger.LogInformation($"[Disconnected] User Diconnected: {user.UserName}");
+            _logger.LogInformation($"[Disconnected] User Diconnected: {user.UserName ?? ""}");
 
             MessageModel MessageModel = new MessageModel
             {

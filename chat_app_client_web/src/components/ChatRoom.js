@@ -1,29 +1,14 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useRef } from "react";
 import MessageContainer from "./MessageContainer";
 import { convertBase64 } from "../services/ImageService";
 
-function ChatRoom({
-  userId,
-  messages,
-  sendMessage,
-  sendMessageToUser,
-  fetchOldMessages,
-}) {
+function ChatRoom({ userId, messages, sendMessage }) {
   // const hasFetchedMessages = useRef(false);
   const dummy = useRef();
   const [message, setMessage] = useState("");
   const [base64, setBase64] = useState("");
   const [selectedImage, setSelectedImage] = useState(null);
-  const [recipientId, setRecipientId] = useState(""); // New state for user ID
-  const [isTagging, setIsTagging] = useState(false); // State to toggle user ID input
   const fileInputRef = useRef();
-
-  // useEffect(() => {
-  //   if (!hasFetchedMessages.current) {
-  //     fetchOldMessages();
-  //     hasFetchedMessages.current = true;
-  //   }
-  // }, [fetchOldMessages]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -37,19 +22,11 @@ function ChatRoom({
     // Convert payload to JSON string
     const messagePayloadString = JSON.stringify(messagePayload);
 
-    // Send message as JSON string, either to a specific user or to the room
-    console.log("Recipient ID: ", recipientId);
-    if (recipientId) {
-      sendMessageToUser(recipientId, messagePayloadString);
-    } else {
-      sendMessage(messagePayloadString);
-    }
+    sendMessage(messagePayloadString);
 
     setMessage("");
     setSelectedImage(null);
     setBase64("");
-    setRecipientId("");
-    setIsTagging(false);
     fileInputRef.current.value = null;
     dummy.current.scrollIntoView({ behavior: "smooth" });
   };
@@ -86,14 +63,6 @@ function ChatRoom({
           📷
         </label>
 
-        <label
-          type="button"
-          className="tag-user-button"
-          onClick={() => setIsTagging(!isTagging)}
-        >
-          📌
-        </label>
-
         {selectedImage && (
           <div className="image-preview-container">
             <img src={selectedImage} alt="Preview" className="image-preview" />
@@ -105,14 +74,6 @@ function ChatRoom({
               &times;
             </button>
           </div>
-        )}
-        {isTagging && (
-          <input
-            value={recipientId}
-            onChange={(e) => setRecipientId(e.target.value)}
-            placeholder="Enter user ID"
-            className="recipient-id-input"
-          />
         )}
         <input
           value={message}

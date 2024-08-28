@@ -2,7 +2,11 @@
 import { HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
 import axios from "axios";
 import { API_CHAT_URL, GetAPIMessagesUrl } from "../constants/ApiUrl";
-import { computeSecret } from "../services/E2EEService";
+import {
+  computeSecret,
+  encryptMessage,
+  decryptMessage,
+} from "../services/E2EEService";
 
 export const joinPublicChatRoom = async (
   username,
@@ -70,14 +74,20 @@ export const joinPrivateChatRoom = async (
       .configureLogging(LogLevel.Information)
       .build();
 
+    var secretkey = null;
+
     conn.on("ReceiveMessageChatRoom", (res) => {
       try {
-        const {
+        var {
           userId,
           userName: username,
           messageText: msg,
           createDate: time,
         } = res;
+
+        if (userId !== 0) {
+          msg = decryptMessage(msg, secretkey);
+        }
         setMessages((prevMessages) => [
           ...prevMessages,
           { userId, username, msg, time },
@@ -92,7 +102,7 @@ export const joinPrivateChatRoom = async (
         const inputPublicKey = res;
         console.log("Received public key: ", res);
         if (publickey && inputPublicKey) {
-          const secretkey = await computeSecret(inputPublicKey);
+          secretkey = await computeSecret(inputPublicKey);
           setSecret(secretkey);
           console.log("Secret key: ", secretkey);
 
@@ -132,65 +142,24 @@ export const sendMessage = async (
   username,
   userId,
   messageText,
-  roomId
+  roomId,
+  secretKey
 ) => {
   try {
     if (connection) {
       if (isPrivate) {
+        const encryptedMessage = encryptMessage(messageText, secretKey);
+
         await connection.invoke(
           "SendMessageChatRoom",
           username,
           userId,
-          messageText,
+          encryptedMessage,
           roomId
         );
         return;
       }
       await connection.invoke("SendUserMessage", username, userId, messageText);
-    } else {
-      console.error("No connection to server.");
-    }
-  } catch (error) {
-    console.error("Send message error: ", error);
-  }
-};
-
-export const sendMessageToUser = async (
-  targetUserId,
-  connection,
-  isPrivate,
-  username,
-  userId,
-  messageText,
-  roomId
-) => {
-  try {
-    if (connection) {
-      if (isPrivate) {
-        await connection.invoke(
-          "SendMessageToUserInRoom",
-          targetUserId,
-          username,
-          userId,
-          messageText,
-          roomId
-        );
-        return;
-      }
-      console.log(
-        "Sending message to user: ",
-        targetUserId,
-        username,
-        userId,
-        messageText
-      );
-      await connection.invoke(
-        "SendMessageToUser",
-        targetUserId,
-        username,
-        userId,
-        messageText
-      );
     } else {
       console.error("No connection to server.");
     }
