@@ -8,6 +8,8 @@ This project is a cross-platform chat application for both web and mobile, devel
 
 - E2EE: Implementing End-to-End Encryption to protect user privacy and data security.
 
+- Text and Image Messaging: Supports sending both text messages and images across web and mobile platforms.
+
 - Public and Private Chats: Users can switch between public rooms or private, encrypted conversations.
 
 - Cross-platform Compatibility: Accessible on both web and mobile platforms.
