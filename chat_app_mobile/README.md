@@ -1,10 +1,6 @@
 # chat_app_mobile
 
-A new Flutter project.
-
-# Link download APK:
-
-[App APK](https://drive.google.com/drive/folders/1sNM5P-0xCPJf-HCdjhtquut3Khh26Y0U?usp=drive_link)
+A new Flutte project for the chat app mobile client.
 
 ## Getting Started
 
