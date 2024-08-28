@@ -30,6 +30,8 @@ This project is a cross-platform chat application for both web and mobile, devel
 
 > _Note: the E2EE feature is in the Crypto branch_
 
+> _Note: If you want to run server, you need to change MongoDB connection string in appsettings.json_
+
 # Deployed Link
 
 [Chat Web](https://chat-app-signalr.onrender.com/)
