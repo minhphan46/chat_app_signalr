@@ -11,7 +11,9 @@ import {
   sendMessage,
   leaveChatRoom,
   fetchOldMessages,
+  sendMessageToUser,
 } from "./services/ChatService";
+import { generateKeyAsync } from "./services/E2EEService";
 
 function App() {
   const [connection, setConnection] = useState(null);
@@ -39,7 +41,9 @@ function App() {
         setRoomId,
         setMessages,
         setConnection,
-        userId
+        userId,
+        publicKey,
+        setSecret
       );
     } else {
       await joinPublicChatRoom(
@@ -53,6 +57,14 @@ function App() {
       );
     }
   };
+
+  const [publicKey, setPublicKey] = useState(null);
+  const [secret, setSecret] = useState("");
+
+  useEffect(() => {
+    // generateKey
+    generateKeyAsync(setPublicKey);
+  }, []);
 
   return (
     <div className="App">
@@ -82,6 +94,17 @@ function App() {
             messages={messages}
             sendMessage={(messageText) =>
               sendMessage(
+                connection,
+                isPrivate,
+                username,
+                userId,
+                messageText,
+                roomId
+              )
+            }
+            sendMessageToUser={(targetUserId, messageText) =>
+              sendMessageToUser(
+                targetUserId,
                 connection,
                 isPrivate,
                 username,

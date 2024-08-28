@@ -2,6 +2,7 @@
 import { HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
 import axios from "axios";
 import { API_CHAT_URL, GetAPIMessagesUrl } from "../constants/ApiUrl";
+import { computeSecret } from "../services/E2EEService";
 
 export const joinPublicChatRoom = async (
   username,
@@ -57,7 +58,9 @@ export const joinPrivateChatRoom = async (
   setRoomId,
   setMessages,
   setConnection,
-  userId
+  userId,
+  publickey,
+  setSecret
 ) => {
   try {
     setUsername(username);
@@ -84,8 +87,38 @@ export const joinPrivateChatRoom = async (
       }
     });
 
+    conn.on("ReceivePublicKey", async (res) => {
+      try {
+        const inputPublicKey = res;
+        console.log("Received public key: ", res);
+        if (publickey && inputPublicKey) {
+          const secretkey = await computeSecret(inputPublicKey);
+          setSecret(secretkey);
+          console.log("Secret key: ", secretkey);
+
+          // add a system message to the chat
+          const newMessage = {
+            userId: 0,
+            username: "system",
+            msg: "Secret key: " + secretkey,
+            time: Date(),
+          };
+
+          setMessages((prevMessages) => [...prevMessages, newMessage]);
+        }
+      } catch (error) {
+        console.error("Error parsing message: ", error, res);
+      }
+    });
+
     await conn.start();
-    await conn.invoke("JoindSpecificChatRoom", username, userId, roomId);
+    await conn.invoke(
+      "JoindSpecificChatRoom",
+      username,
+      userId,
+      roomId,
+      publickey
+    );
 
     setConnection(conn);
   } catch (error) {
@@ -114,6 +147,50 @@ export const sendMessage = async (
         return;
       }
       await connection.invoke("SendUserMessage", username, userId, messageText);
+    } else {
+      console.error("No connection to server.");
+    }
+  } catch (error) {
+    console.error("Send message error: ", error);
+  }
+};
+
+export const sendMessageToUser = async (
+  targetUserId,
+  connection,
+  isPrivate,
+  username,
+  userId,
+  messageText,
+  roomId
+) => {
+  try {
+    if (connection) {
+      if (isPrivate) {
+        await connection.invoke(
+          "SendMessageToUserInRoom",
+          targetUserId,
+          username,
+          userId,
+          messageText,
+          roomId
+        );
+        return;
+      }
+      console.log(
+        "Sending message to user: ",
+        targetUserId,
+        username,
+        userId,
+        messageText
+      );
+      await connection.invoke(
+        "SendMessageToUser",
+        targetUserId,
+        username,
+        userId,
+        messageText
+      );
     } else {
       console.error("No connection to server.");
     }
